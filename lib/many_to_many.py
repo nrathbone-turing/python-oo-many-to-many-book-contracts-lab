@@ -1,4 +1,8 @@
+#allows type hints (like `Book`, `Author`, or `Contract`) to be stored as strings internally instead of as the actual class objects
+from __future__ import annotations
 from typing import List
+#used to validate "YYYY-MM-DD" format in Contract.date
+from datetime import datetime
 
 class Author:
     """An author who may sign multiple contracts with different books"""
@@ -119,6 +123,11 @@ class Contract:
     def date(self, value: str) -> None:
         if not isinstance(value, str):
             raise TypeError("date must be a string")
+        #I wanted to add datetime validation here but it broke the tests since it wasn't expecting it so I commented it out
+        # try:
+        #     datetime.strptime(value, "%Y-%m-%d")
+        # except ValueError:
+        #     raise ValueError("date must be in YYYY-MM-DD format")
         self._date = value
 
     # read-only public attribute per spec
