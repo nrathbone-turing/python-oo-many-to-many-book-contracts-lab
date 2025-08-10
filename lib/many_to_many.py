@@ -77,4 +77,67 @@ class Book:
 
 
 class Contract:
-    pass
+    """Connects an Author and a Book with a date and royalties; all fields are validated via property setters as per the spec"""
+    all: List["Contract"] = []
+
+    def __init__(self, author: "Author", book: "Book", date: str, royalties: int):
+        # Use properties so validation runs on construction
+        self.author = author
+        self.book = book
+        self.date = date
+        self.royalties = royalties
+        Contract.all.append(self)
+
+    # read-only public attribute per spec
+    @property
+    def author(self) -> "Author":
+        return self._author
+
+    @author.setter
+    def author(self, value: Author) -> None:
+        if not isinstance(value, Author):
+            raise TypeError("author must be an instance of Author")
+        self._author = value
+
+    # read-only public attribute per spec
+    @property
+    def book(self) -> "Book":
+        return self._book
+
+    @book.setter
+    def book(self, value: Book) -> None:
+        if not isinstance(value, Book):
+            raise TypeError("book must be an instance of Book")
+        self._book = value
+
+    # read-only public attribute per spec
+    @property
+    def date(self) -> str:
+        return self._date
+
+    @date.setter
+    def date(self, value: str) -> None:
+        if not isinstance(value, str):
+            raise TypeError("date must be a string")
+        self._date = value
+
+    # read-only public attribute per spec
+    @property
+    def royalties(self) -> int:
+        return self._royalties
+
+    @royalties.setter
+    def royalties(self, value: int) -> None:
+        if not isinstance(value, int):
+            raise TypeError("royalties must be an integer")
+        if value < 0:
+            raise ValueError("royalties must be non-negative")
+        self._royalties = value
+
+    @classmethod
+    def contracts_by_date(cls, date: str) -> List["Contract"]:
+        """All contracts that match the given date."""
+        return [c for c in cls.all if c.date == date]
+
+    def __repr__(self) -> str:
+        return (f"Contract(author={self.author!r}, book={self.book!r}, "f"date={self.date!r}, royalties={self.royalties})")
